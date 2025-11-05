@@ -1,0 +1,48 @@
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: evolution_postgres
+    environment:
+      POSTGRES_DB: evolution
+      POSTGRES_USER: evolution_user
+      POSTGRES_PASSWORD: evolution_pass
+    volumes:
+      - evolution_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: evolution_redis
+    volumes:
+      - evolution_redis_data:/data
+    ports:
+      - "6379:6379"
+
+  evolution-api:
+    image: atendai/evolution-api:v2.1.1
+    container_name: evolution_api
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - evolution_instances:/evolution/instances
+    depends_on:
+      - postgres
+      - redis
+
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  evolution_db_data:
+  evolution_redis_data:
+  evolution_instances:
+  n8n_data:
