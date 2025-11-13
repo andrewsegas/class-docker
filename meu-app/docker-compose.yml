@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  flask1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: flask-contador:1.0
+    container_name: flask-contador-1
+    ports:
+      - "5000:5000"
+    volumes:
+      - contador1:/app/data
+
+  flask2:
+    image: flask-contador:1.0
+    container_name: flask-contador-2
+    ports:
+      - "5001:5000"
+    volumes:
+      - contador2:/app/data
+
+  flask3:
+    image: flask-contador:1.0
+    container_name: flask-contador-3
+    ports:
+      - "5002:5000"
+    volumes:
+      - contador2:/app/data
+
+  flask4:
+    image: flask-contador:1.0
+    container_name: flask-contador-4
+    ports:
+      - "5003:5000"
+    volumes:
+      - contador2:/app/data
+
+volumes:
+  contador1:
+  contador2:
